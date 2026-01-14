@@ -1,0 +1,14 @@
+# Linux folder customization
+.directory
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# OS generated files
+Thumbs.db
+*. swp
+*~
