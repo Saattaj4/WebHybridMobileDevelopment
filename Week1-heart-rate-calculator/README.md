@@ -11,5 +11,5 @@ Heart rate is calculated on keystroke.
 
 ## Screenshot from app
 
-![Heart rate limits calculator](/AppView.png)
+![Heart rate limits calculator](./AppView.png)
 
