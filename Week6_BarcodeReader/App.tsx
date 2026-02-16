@@ -1,12 +1,11 @@
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import { CameraView, useCameraPermissions, BarcodeScanningResult } from 'expo-camera';
 import { useState } from 'react';
-import {Button, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-
-
+import { Button, StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
-  const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
+  const [scannedData, setScannedData] = useState<string | null>(null);
+  const [scanned, setScanned] = useState(false);
 
   if (!permission) {
     return <View />;
@@ -15,23 +14,38 @@ export default function App() {
   if (!permission.granted) {
     return (
       <View style={styles.container}>
-        <Text style={styles.message}> Permission needed for camera usage.</Text>
-        <Button onPress={requestPermission} title="Grant Permission" />
+        <Text style={styles.message}>
+          App needs to use front camera. Give access?.
+        </Text>
+        <Button onPress={requestPermission} title="Grant Permission to Camera" />
       </View>
-    )
+    );
   }
 
 
-  function toggleCameraFacing() {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
+  function handleBarcodeScanned(result: BarcodeScanningResult) {
+    setScanned(true);
+    setScannedData(result.data);
   }
 
   return (
     <View style={styles.container}>
-      <CameraView style={styles.camera} facing={facing} />
-      <TouchableOpacity onPress={toggleCameraFacing} style={styles.button}>
-        <Text style={styles.text}>Toggle Camera</Text>
-      </TouchableOpacity>
+      <CameraView
+        style={styles.camera}
+        facing="back"
+        barcodeScannerSettings={{
+          barcodeTypes: ['qr', 'ean13', 'code128'],
+        }}
+        onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
+      />
+
+      {scannedData && (
+        <View style={styles.resultContainer}>
+          <Text style={styles.resultText}>Scanned:</Text>
+          <Text style={styles.resultText}>{scannedData}</Text>
+          <Button title="Scan Again" onPress={() => setScanned(false)} />
+        </View>
+      )}
     </View>
   );
 }
@@ -40,7 +54,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
   },
   message: {
     textAlign: 'center',
@@ -49,21 +62,17 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-  buttonContainer: {
+  resultContainer: {
     position: 'absolute',
-    bottom: 64,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    width: '100%',
-    paddingHorizontal: 64,
+    bottom: 50,
+    alignSelf: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    padding: 16,
+    borderRadius: 10,
   },
-  button: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  resultText: {
     color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
