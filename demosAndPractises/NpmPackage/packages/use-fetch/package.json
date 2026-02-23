@@ -1,0 +1,40 @@
+{
+  "name": "@local/use-fetch",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Small reusable React hook (useFetch) for fetching JSON (local package for development)",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build:watch": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "clean": "rimraf dist",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=17",
+    "react-native": ">=0.64"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "rimraf": "^3.0.0",
+    "tsup": "^6.0.0",
+    "typescript": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://example.com/your-repo.git"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "hook",
+    "useFetch"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
