@@ -2,10 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import { Button, StyleSheet, TextInput, View, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { firestore, collection, addDoc, MESSAGES, serverTimestamp, query, orderBy, onSnapshot } from './firebase/Config';
+import Login from './components/Login';
 
 export default function App(): React.ReactElement {
-  const [messages, setMessages] = useState<string[]>([]);
-  const [newMessage, setNewMessage] = useState<string>('');
+  const [messages, setMessages] = useState<string[]>([])
+  const [newMessage, setNewMessage] = useState<string>('')
+  const [loggedIn, setLoggedIn] = useState<boolean>(false)
 
   useEffect(() => {
     const colRef = collection(firestore, MESSAGES);
@@ -38,6 +40,18 @@ export default function App(): React.ReactElement {
       console.error('Failed to save message', err);
     }
   }
+
+  if (!loggedIn) {
+    return (
+      <View style={styles.container}>
+        <Login setLoggedIn={setLoggedIn} />
+        <StatusBar style="auto" />
+      </View>
+    );
+  }
+
+
+
 
   return (
     <View style={styles.container}>
